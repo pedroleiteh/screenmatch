@@ -4,6 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import tech.pedroleite.screenmatch.service.ConsumoApi;
+
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner{
 
@@ -13,7 +15,9 @@ public class ScreenmatchApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Primeiro projeto Spring sem web");
+		ConsumoApi consumoApi = new ConsumoApi();
+		var json = consumoApi.obterDados("https://www.omdbapi.com/?t=suits&apikey=1d86c7af");
+		System.out.println(json);
 	}
 
 
