@@ -2,24 +2,42 @@ package tech.pedroleite.screenmatch.ui;
 
 import java.util.Scanner;
 
-import tech.pedroleite.screenmatch.dtos.SerieDto;
-import tech.pedroleite.screenmatch.service.ConsumoApi;
-import tech.pedroleite.screenmatch.service.ConverteDados;
+
+import tech.pedroleite.screenmatch.service.SerieService;
 
 public class Ui {
 
     private Scanner sc = new Scanner(System.in);
-    private ConsumoApi consumoApi = new ConsumoApi();
-    private ConverteDados converteDados = new ConverteDados();
-    private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=" + System.getenv("OMDB_KEY");
+    private SerieService serieService = new SerieService();
 
 
     public void exibiMenu() {
-        System.out.println("Digite o nome da série para busca: ");
-        var nomeSerie = sc.nextLine();
-        var json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        var serie = converteDados.obterDados(json, SerieDto.class);
-        System.out.println(serie);
+
+        var nomeSerie = serieService.pesquisarSerie(sc);
+        serieService.exibirDadosSerie(nomeSerie);
+
+        while (true) {
+            System.out.println("Escolha uma opção: ");
+            System.out.println("Digite 1 para mostrar as temporadas da serie atual");
+            System.out.println("Digite 2 para pesquisar outra série");
+            System.out.println("Digite 'sair' para sair");
+            var resposta = sc.nextLine();
+
+            if (resposta.trim().toUpperCase().equals("SAIR")) {
+                break;
+            }
+
+            switch (resposta) {
+                case "1":
+                    serieService.exibirEpisodiosSerie(nomeSerie);
+                    break;
+                case "2":
+                    nomeSerie = serieService.pesquisarSerie(sc);
+                    serieService.exibirDadosSerie(nomeSerie);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
