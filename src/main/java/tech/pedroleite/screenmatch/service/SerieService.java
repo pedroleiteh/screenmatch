@@ -1,7 +1,6 @@
 package tech.pedroleite.screenmatch.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -10,6 +9,7 @@ import java.util.stream.Collectors;
 import tech.pedroleite.screenmatch.dtos.EpisodioDto;
 import tech.pedroleite.screenmatch.dtos.SerieDto;
 import tech.pedroleite.screenmatch.dtos.TemporadaDto;
+import tech.pedroleite.screenmatch.model.Episodio;
 
 public class SerieService {
     private ConsumoApi consumoApi = new ConsumoApi();
@@ -41,7 +41,13 @@ public class SerieService {
             TemporadaDto temporadaDto = converteDados.obterDados(json, TemporadaDto.class);
             temporadas.add(temporadaDto);
         }
-        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
+        
+        List<Episodio> episodios = temporadas.stream()
+        .flatMap(t -> t.episodios().stream()
+                .map(e -> new Episodio(t.numero(), e))
+        ).collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
     }
 
     public void top5melhoresSeries(String nomeSerie) {
