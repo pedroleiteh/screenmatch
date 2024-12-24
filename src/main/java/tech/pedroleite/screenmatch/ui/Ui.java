@@ -17,9 +17,10 @@ public class Ui {
         serieService.exibirDadosSerie(nomeSerie);
 
         while (true) {
-            System.out.println("Escolha uma opção: ");
+            System.out.println("\nEscolha uma opção: ");
             System.out.println("Digite 1 para mostrar as temporadas da serie atual");
             System.out.println("Digite 2 para pesquisar outra série");
+            System.out.println("Digite 3 para mostrar os 5 melhores eps da serie atual");
             System.out.println("Digite 'sair' para sair");
             var resposta = sc.nextLine();
 
@@ -34,6 +35,9 @@ public class Ui {
                 case "2":
                     nomeSerie = serieService.pesquisarSerie(sc);
                     serieService.exibirDadosSerie(nomeSerie);
+                    break;
+                case "3":
+                    serieService.top5melhoresSeries(nomeSerie);
                     break;
                 default:
                     break;
