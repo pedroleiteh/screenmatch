@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import javax.swing.text.DateFormatter;
-
 import tech.pedroleite.screenmatch.dtos.EpisodioDto;
 import tech.pedroleite.screenmatch.dtos.SerieDto;
 import tech.pedroleite.screenmatch.dtos.TemporadaDto;
@@ -29,15 +27,14 @@ public class SerieService {
         return nomeSerie;
     }
 
-    public void exibirDadosSerie(String nomeSerie) {
+    public SerieDto buscarDadosSerie(String nomeSerie) {
         var json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        var serie = converteDados.obterDados(json, SerieDto.class);
-        System.out.println(serie);
+        return converteDados.obterDados(json, SerieDto.class);
     }
 
     public void exibirEpisodiosSerie(String nomeSerie) {
-        var json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        var serie = converteDados.obterDados(json, SerieDto.class);
+        String json;
+        var serie = buscarDadosSerie(nomeSerie);
         List<TemporadaDto> temporadas = new ArrayList<>();
         
         for (int i = 1; i < serie.totalTemporadas(); i++) {
@@ -55,8 +52,8 @@ public class SerieService {
     }
 
     public void top5melhoresSeries(String nomeSerie) {
-        var json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        var serie = converteDados.obterDados(json, SerieDto.class);
+        String json;
+        var serie = buscarDadosSerie(nomeSerie);
 
         List<TemporadaDto> temporadas = new ArrayList<>();
         
@@ -79,8 +76,8 @@ public class SerieService {
     }
 
     public void buscandoEpsPorAno(String nomeSerie, int ano) {
-        var json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        var serie = converteDados.obterDados(json, SerieDto.class);
+        String json;
+        var serie = buscarDadosSerie(nomeSerie);
         List<TemporadaDto> temporadas = new ArrayList<>();
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

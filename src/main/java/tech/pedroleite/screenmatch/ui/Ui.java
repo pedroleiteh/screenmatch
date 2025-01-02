@@ -14,7 +14,7 @@ public class Ui {
     public void exibiMenu() {
 
         var nomeSerie = serieService.pesquisarSerie(sc);
-        serieService.exibirDadosSerie(nomeSerie);
+        System.out.println(serieService.buscarDadosSerie(nomeSerie));
 
         while (true) {
             System.out.println("\nEscolha uma opção: ");
@@ -35,7 +35,7 @@ public class Ui {
                     break;
                 case "2":
                     nomeSerie = serieService.pesquisarSerie(sc);
-                    serieService.exibirDadosSerie(nomeSerie);
+                    System.out.println(serieService.buscarDadosSerie(nomeSerie));
                     break;
                 case "3":
                     serieService.top5melhoresSeries(nomeSerie);
