@@ -21,6 +21,7 @@ public class Ui {
             System.out.println("Digite 1 para mostrar as temporadas da serie atual");
             System.out.println("Digite 2 para pesquisar outra série");
             System.out.println("Digite 3 para mostrar os 5 melhores eps da serie atual");
+            System.out.println("Digite 4 para pesquisar episódios por data");
             System.out.println("Digite 'sair' para sair");
             var resposta = sc.nextLine();
 
@@ -39,6 +40,11 @@ public class Ui {
                 case "3":
                     serieService.top5melhoresSeries(nomeSerie);
                     break;
+                case "4":
+                    System.out.println("A partir de que ano você deseja ver os episódios");
+                    var ano = sc.nextInt();
+                    sc.nextLine();
+                    serieService.buscandoEpsPorAno(nomeSerie, ano);
                 default:
                     break;
             }

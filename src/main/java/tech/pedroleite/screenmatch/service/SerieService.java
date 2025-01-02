@@ -1,10 +1,14 @@
 package tech.pedroleite.screenmatch.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+import javax.swing.text.DateFormatter;
 
 import tech.pedroleite.screenmatch.dtos.EpisodioDto;
 import tech.pedroleite.screenmatch.dtos.SerieDto;
@@ -72,5 +76,34 @@ public class SerieService {
             .sorted(Comparator.comparing(EpisodioDto::avaliacao).reversed())
             .limit(5)
             .forEach(System.out::println);
+    }
+
+    public void buscandoEpsPorAno(String nomeSerie, int ano) {
+        var json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
+        var serie = converteDados.obterDados(json, SerieDto.class);
+        List<TemporadaDto> temporadas = new ArrayList<>();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate dataBusca = LocalDate.of(ano, 1, 1);
+
+        for (int i = 1; i < serie.totalTemporadas(); i++) {
+            json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + "&season=" + i +API_KEY);
+            TemporadaDto temporadaDto = converteDados.obterDados(json, TemporadaDto.class);
+            temporadas.add(temporadaDto);
+        }
+        
+        List<Episodio> episodios = temporadas.stream()
+        .flatMap(t -> t.episodios().stream()
+                .map(e -> new Episodio(t.numero(), e))
+        ).collect(Collectors.toList());
+
+        episodios.stream()
+            .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+            .forEach(e -> System.out.println(
+                "Temporada: " + e.getTemporada() +
+                " Episodio: " + e.getTitulo() +
+                " Data lançamento: " + e.getDataLancamento().format(df)
+            ));
+        
     }
 }
