@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import tech.pedroleite.screenmatch.model.Serie;
+import tech.pedroleite.screenmatch.repository.SerieRepository;
 import tech.pedroleite.screenmatch.service.SerieService;
 
 public class Ui {
@@ -12,12 +13,20 @@ public class Ui {
     private Scanner sc = new Scanner(System.in);
     private SerieService serieService = new SerieService();
     private List<Serie> series = new ArrayList<>();
+    private SerieRepository repository;
+
+
+    public Ui(SerieRepository repository) {
+        this.repository = repository;
+    }
 
 
     public void exibiMenu() {
 
         var nomeSerie = serieService.pesquisarSerie(sc);
         var serieDto = serieService.buscarDadosSerie(nomeSerie);
+        Serie serie = new Serie(serieDto);
+        repository.save(serie);
         System.out.println(serieDto);
         series.add(new Serie(serieDto));
 
