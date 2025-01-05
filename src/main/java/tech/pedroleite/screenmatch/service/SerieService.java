@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,14 @@ public class SerieService {
 
     public List<Serie> top5melhoresSeries() {
         return repository.findTop5ByOrderByAvaliacaoDesc();
+    }
+
+    public Serie exibirSeriePorId(Long id) {
+        Optional<Serie> serie = repository.findById(id);
+        if (serie.isPresent()) {
+            return serie.get();
+        }
+        return null;
     }
 
     public String pesquisarSerie(Scanner sc) {
