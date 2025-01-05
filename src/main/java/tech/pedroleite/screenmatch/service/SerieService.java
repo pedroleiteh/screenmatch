@@ -32,6 +32,10 @@ public class SerieService {
         return repository.findAll();
     }
 
+    public List<Serie> top5melhoresSeries() {
+        return repository.findTop5ByOrderByAvaliacaoDesc();
+    }
+
     public String pesquisarSerie(Scanner sc) {
         System.out.print("\033[H\033[2J");
         System.out.println("Digite o nome da série para busca:");
@@ -64,7 +68,7 @@ public class SerieService {
         episodios.forEach(System.out::println);
     }
 
-    public void top5melhoresSeries(String nomeSerie) {
+    public void top5melhoresEpsPorSeries(String nomeSerie) {
         String json;
         var serie = buscarDadosSerie(nomeSerie);
 
