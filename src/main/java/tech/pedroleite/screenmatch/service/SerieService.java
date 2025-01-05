@@ -8,16 +8,29 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import tech.pedroleite.screenmatch.dtos.EpisodioDto;
 import tech.pedroleite.screenmatch.dtos.SerieDto;
 import tech.pedroleite.screenmatch.dtos.TemporadaDto;
 import tech.pedroleite.screenmatch.model.Episodio;
+import tech.pedroleite.screenmatch.model.Serie;
+import tech.pedroleite.screenmatch.repository.SerieRepository;
 
+@Service
 public class SerieService {
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConverteDados converteDados = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=" + System.getenv("OMDB_KEY");
+
+    @Autowired
+    private SerieRepository repository;
+
+    public List<Serie> exibirSeries() {
+        return repository.findAll();
+    }
 
     public String pesquisarSerie(Scanner sc) {
         System.out.print("\033[H\033[2J");
